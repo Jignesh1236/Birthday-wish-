@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sumana! 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFE5F1 0%, #E8D5F2 25%, #C9E4F5 50%, #FFE5EC 75%, #FFF5E1 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        #confetti-canvas.active {
+            opacity: 0.7;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .gift-box-container {
+            perspective: 1500px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .gift-box-container:active {
+            transform: scale(0.97);
+        }
+
+        .gift-box {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .box-base {
+            width: 100%;
+            height: 65%;
+            background: linear-gradient(135deg, #FFB3D9 0%, #FFC0E3 100%);
+            border-radius: 25px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 
+                0 15px 40px rgba(255, 182, 223, 0.4),
+                inset 0 5px 15px rgba(255, 255, 255, 0.5);
+            border: 3px solid #FFD4E8;
+        }
+
+        .box-lid {
+            width: 105%;
+            height: 40%;
+            background: linear-gradient(135deg, #FFD4E8 0%, #FFE0EE 100%);
+            border-radius: 25px 25px 15px 15px;
+            position: absolute;
+            top: 0;
+            left: -2.5%;
+            box-shadow: 
+                0 10px 30px rgba(255, 182, 223, 0.3),
+                inset 0 3px 10px rgba(255, 255, 255, 0.7);
+            z-index: 2;
+            border: 3px solid #FFE0EE;
+            transition: transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+            transform-origin: bottom center;
+        }
+
+        .gift-box.opening .box-lid {
+            transform: rotateX(-120deg) translateY(-20px);
+            opacity: 0;
+        }
+
+        .gift-box.opening {
+            animation: none;
+        }
+
+        .ribbon-vertical {
+            width: 45px;
+            height: 100%;
+            background: linear-gradient(90deg, #B4E4FF 0%, #C5EBFF 50%, #B4E4FF 100%);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 
+                inset 0 0 15px rgba(255, 255, 255, 0.5),
+                0 0 10px rgba(180, 228, 255, 0.3);
+            border: 2px solid #D4F1FF;
+        }
+
+        .ribbon-horizontal {
+            width: 100%;
+            height: 45px;
+            background: linear-gradient(180deg, #B4E4FF 0%, #C5EBFF 50%, #B4E4FF 100%);
+            position: absolute;
+            top: 42%;
+            box-shadow: 
+                inset 0 0 15px rgba(255, 255, 255, 0.5),
+                0 0 10px rgba(180, 228, 255, 0.3);
+            border: 2px solid #D4F1FF;
+        }
+
+        .bow {
+            width: 90px;
+            height: 90px;
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            animation: bowGentle 3s ease-in-out infinite;
+        }
+
+        @keyframes bowGentle {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+
+        .bow::before,
+        .bow::after {
+            content: '';
+            position: absolute;
+            width: 45px;
+            height: 55px;
+            background: linear-gradient(135deg, #FFB4D5 0%, #FFC9E0 100%);
+            border-radius: 50% 50% 0 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 
+                0 5px 15px rgba(255, 180, 213, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.6);
+            border: 2px solid #FFD4E8;
+        }
+
+        .bow::before {
+            left: 0;
+            transform: translateY(-50%) rotate(-45deg);
+        }
+
+        .bow::after {
+            right: 0;
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        .bow-center {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #FF9FC8 0%, #FFBAD9 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            box-shadow: 
+                0 3px 10px rgba(255, 159, 200, 0.4),
+                inset 0 2px 5px rgba(255, 255, 255, 0.7);
+            border: 2px solid #FFD4E8;
+        }
+
+        .cute-face {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 70px;
+            z-index: 1;
+            animation: smile 3s ease-in-out infinite;
+        }
+
+        @keyframes smile {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .tap-hint {
+            margin-top: 50px;
+            font-size: 1.6rem;
+            color: #FF69B4;
+            text-shadow: 
+                2px 2px 0px rgba(255, 255, 255, 0.8),
+                0 0 20px rgba(255, 105, 180, 0.3);
+            animation: gentleBounce 2.5s ease-in-out infinite;
+            font-weight: 700;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 35px;
+            animation: gentleFloat 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes gentleSparkle {
+            0%, 100% { 
+                opacity: 0.4; 
+                transform: translateY(0) scale(0.9); 
+            }
+            50% { 
+                opacity: 0.9; 
+                transform: translateY(-10px) scale(1.1); 
+            }
+        }
+
+        .sparkle:nth-child(1) { 
+            top: 5%; 
+            left: 8%; 
+            animation: gentleSparkle 7s ease-in-out infinite;
+            animation-delay: 0s; 
+        }
+        .sparkle:nth-child(2) { 
+            top: 15%; 
+            right: 12%; 
+            animation: gentleSparkle 6.5s ease-in-out infinite;
+            animation-delay: 0.5s; 
+        }
+        .sparkle:nth-child(3) { 
+            bottom: 25%; 
+            left: 15%; 
+            animation: gentleSparkle 7.5s ease-in-out infinite;
+            animation-delay: 1s; 
+        }
+        .sparkle:nth-child(4) { 
+            bottom: 20%; 
+            right: 8%; 
+            animation: gentleSparkle 6.8s ease-in-out infinite;
+            animation-delay: 1.5s; 
+        }
+        .sparkle:nth-child(5) { 
+            top: 50%; 
+            left: 5%; 
+            animation: gentleSparkle 7.2s ease-in-out infinite;
+            animation-delay: 0.3s; 
+        }
+
+        .wish-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            background: linear-gradient(135deg, #FFFAFD 0%, #FFF5FA 100%);
+            border-radius: 35px;
+            padding: 60px 40px;
+            box-shadow: 
+                0 20px 60px rgba(255, 182, 223, 0.3),
+                inset 0 3px 15px rgba(255, 255, 255, 0.8);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 3px solid #FFE5F1;
+        }
+
+        .wish-card.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .wish-card h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #FF9FC8 0%, #FFB4D5 50%, #FF69B4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .wish-card .name {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF8DC7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(255, 105, 180, 0.2);
+        }
+
+        .wish-card .cake {
+            font-size: 100px;
+            margin: 30px 0;
+            display: inline-block;
+            animation: gentleWiggle 4s ease-in-out infinite;
+        }
+
+        @keyframes gentleWiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .wish-card .message {
+            font-size: 1.8rem;
+            color: #FF69B4;
+            margin: 30px 0;
+            font-weight: 600;
+        }
+
+        .wish-card .party-emojis {
+            font-size: 50px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .wish-card .party-emojis span {
+            display: inline-block;
+            animation: emojiFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes emojiFloat {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-12px) rotate(5deg); 
+            }
+        }
+
+        .wish-card .party-emojis span:nth-child(1) { animation-delay: 0s; }
+        .wish-card .party-emojis span:nth-child(2) { animation-delay: 0.2s; }
+        .wish-card .party-emojis span:nth-child(3) { animation-delay: 0.4s; }
+        .wish-card .party-emojis span:nth-child(4) { animation-delay: 0.6s; }
+        .wish-card .party-emojis span:nth-child(5) { animation-delay: 0.8s; }
+
+        .cut-cake-btn {
+            margin-top: 35px;
+            padding: 18px 40px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFB4D5 0%, #FFC9E0 100%);
+            border: 3px solid #FFD4E8;
+            border-radius: 50px;
+            color: #FF69B4;
+            cursor: pointer;
+            box-shadow: 
+                0 8px 20px rgba(255, 180, 213, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .cut-cake-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 12px 30px rgba(255, 180, 213, 0.5),
+                inset 0 2px 8px rgba(255, 255, 255, 0.7);
+        }
+
+        .cut-cake-btn:active {
+            transform: translateY(0);
+        }
+
+        .cake-cutting-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 245, 250, 0.95);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .cake-cutting-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .cake-scene {
+            text-align: center;
+            position: relative;
+        }
+
+        .big-cake {
+            font-size: 200px;
+            position: relative;
+            display: inline-block;
+            animation: cakeWiggle 1s ease-in-out;
+        }
+
+        @keyframes cakeWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .knife {
+            font-size: 80px;
+            position: absolute;
+            top: -50px;
+            right: -80px;
+            transform: rotate(-45deg);
+            animation: knifeSlice 2s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes knifeSlice {
+            0% {
+                opacity: 0;
+                top: -100px;
+                right: -120px;
+            }
+            30% {
+                opacity: 1;
+                top: -50px;
+                right: -80px;
+            }
+            60% {
+                top: 80px;
+                right: 40px;
+                transform: rotate(-45deg);
+            }
+            100% {
+                top: 80px;
+                right: 40px;
+                transform: rotate(-45deg);
+                opacity: 1;
+            }
+        }
+
+        .cake-pieces {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 40px;
+            opacity: 0;
+            animation: piecesAppear 1s ease-in-out 2s forwards;
+        }
+
+        @keyframes piecesAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cake-piece {
+            font-size: 60px;
+            animation: pieceFloat 2s ease-in-out infinite;
+        }
+
+        .cake-piece:nth-child(1) { animation-delay: 0s; }
+        .cake-piece:nth-child(2) { animation-delay: 0.3s; }
+        .cake-piece:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes pieceFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .celebration-text {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF69B4 0%, #FFB4D5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 40px;
+            opacity: 0;
+            animation: textAppear 0.8s ease-in-out 2.5s forwards;
+        }
+
+        @keyframes textAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .sparkle-burst {
+            position: absolute;
+            font-size: 40px;
+            animation: burstOut 1.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes burstOut {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) scale(0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.5);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gift-box {
+                width: 240px;
+                height: 240px;
+            }
+            
+            .tap-hint {
+                font-size: 1.3rem;
+            }
+
+            .wish-card {
+                padding: 45px 35px;
+            }
+
+            .wish-card h1 {
+                font-size: 2.8rem;
+            }
+
+            .wish-card .name {
+                font-size: 3.2rem;
+            }
+
+            .wish-card .cake {
+                font-size: 80px;
+            }
+
+            .wish-card .message {
+                font-size: 1.5rem;
+            }
+
+            .wish-card .party-emojis {
+                font-size: 40px;
+                gap: 10px;
+            }
+
+            .sparkle {
+                font-size: 28px;
+            }
+
+            .cute-face {
+                font-size: 55px;
+            }
+
+            .cut-cake-btn {
+                font-size: 1.2rem;
+                padding: 15px 35px;
+            }
+
+            .big-cake {
+                font-size: 150px;
+            }
+
+            .knife {
+                font-size: 60px;
+            }
+
+            .cake-piece {
+                font-size: 45px;
+            }
+
+            .celebration-text {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+    
+    <div class="container">
+        <div class="gift-box-container" id="giftBox">
+            <div class="sparkles">
+                <div class="sparkle">✨</div>
+                <div class="sparkle">💖</div>
+                <div class="sparkle">⭐</div>
+                <div class="sparkle">💫</div>
+                <div class="sparkle">🌸</div>
+            </div>
+            <div class="gift-box">
+                <div class="box-base">
+                    <div class="ribbon-vertical"></div>
+                    <div class="ribbon-horizontal"></div>
+                    <div class="cute-face">😊</div>
+                </div>
+                <div class="box-lid">
+                    <div class="bow">
+                        <div class="bow-center"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tap-hint">Tap to Open! 🎁</div>
+        </div>
+
+        <div class="wish-card" id="wishCard">
+            <h1>Happy Birthday</h1>
+            <div class="name">Sumana!</div>
+            <div class="cake">🎂</div>
+            <div class="message">Have an amazing day! 🎉</div>
+            <div class="party-emojis">
+                <span>🌟</span>
+                <span>💖</span>
+                <span>🎉</span>
+                <span>🎈</span>
+                <span>✨</span>
+            </div>
+            <button class="cut-cake-btn" id="cutCakeBtn">Cut the Cake! 🎂🔪</button>
+        </div>
+    </div>
+
+    <div class="cake-cutting-overlay" id="cakeCuttingOverlay">
+        <div class="cake-scene">
+            <div class="big-cake">🎂
+                <div class="knife">🔪</div>
+            </div>
+            <div class="cake-pieces">
+                <div class="cake-piece">🍰</div>
+                <div class="cake-piece">🍰</div>
+                <div class="cake-piece">🍰</div>
+            </div>
+            <div class="celebration-text">Yay! Cake Time! 🎉</div>
+        </div>
+    </div>
+
+    <script>
+        const giftBox = document.getElementById('giftBox');
+        const wishCard = document.getElementById('wishCard');
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctx = confettiCanvas.getContext('2d');
+        
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+
+        let confettiActive = false;
+
+        window.addEventListener('resize', () => {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        });
+
+        giftBox.addEventListener('click', () => {
+            const box = giftBox.querySelector('.gift-box');
+            box.classList.add('opening');
+            
+            setTimeout(() => {
+                giftBox.style.opacity = '0';
+                giftBox.style.transform = 'scale(0.8)';
+                giftBox.style.transition = 'all 0.5s ease';
+            }, 600);
+            
+            setTimeout(() => {
+                giftBox.style.display = 'none';
+                wishCard.classList.add('show');
+                confettiCanvas.classList.add('active');
+                confettiActive = true;
+                startConfetti();
+            }, 1200);
+        });
+
+        const confettiPieces = [];
+        const confettiCount = 80;
+        const colors = ['#FFB4D5', '#FFC9E0', '#B4E4FF', '#C5EBFF', '#FFE5F1', '#E8D5F2', '#FFF5E1'];
+
+        class Confetti {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * confettiCanvas.width;
+                this.y = -20;
+                this.w = Math.random() * 12 + 6;
+                this.h = Math.random() * 6 + 3;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.speedY = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 8 - 4;
+                this.gravity = 0.08;
+                this.swing = Math.random() * 1.5 - 0.75;
+            }
+
+            update() {
+                this.speedY += this.gravity;
+                this.y += this.speedY;
+                this.x += this.speedX + Math.sin(this.y * 0.01) * this.swing;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > confettiCanvas.height) {
+                    this.reset();
+                }
+                
+                if (this.x > confettiCanvas.width + 50) {
+                    this.x = -50;
+                } else if (this.x < -50) {
+                    this.x = confettiCanvas.width + 50;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.w / 2, this.y + this.h / 2);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                
+                ctx.fillStyle = this.color;
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 5;
+                ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+                ctx.restore();
+            }
+        }
+
+        function startConfetti() {
+            for (let i = 0; i < confettiCount; i++) {
+                confettiPieces.push(new Confetti());
+            }
+            animate();
+        }
+
+        function animate() {
+            if (!confettiActive) return;
+            
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            
+            confettiPieces.forEach(piece => {
+                piece.update();
+                piece.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Cake cutting functionality
+        const cutCakeBtn = document.getElementById('cutCakeBtn');
+        const cakeCuttingOverlay = document.getElementById('cakeCuttingOverlay');
+
+        function resetCakeAnimation() {
+            // Remove old cake scene
+            const oldScene = cakeCuttingOverlay.querySelector('.cake-scene');
+            if (oldScene) {
+                oldScene.remove();
+            }
+            
+            // Create fresh cake scene with animations
+            const cakeScene = document.createElement('div');
+            cakeScene.className = 'cake-scene';
+            cakeScene.innerHTML = `
+                <div class="big-cake">🎂
+                    <div class="knife">🔪</div>
+                </div>
+                <div class="cake-pieces">
+                    <div class="cake-piece">🍰</div>
+                    <div class="cake-piece">🍰</div>
+                    <div class="cake-piece">🍰</div>
+                </div>
+                <div class="celebration-text">Yay! Cake Time! 🎉</div>
+            `;
+            cakeCuttingOverlay.appendChild(cakeScene);
+            
+            return cakeScene;
+        }
+
+        cutCakeBtn.addEventListener('click', () => {
+            // Reset and get fresh cake scene
+            const cakeScene = resetCakeAnimation();
+            
+            // Show overlay
+            cakeCuttingOverlay.classList.add('active');
+            
+            // Create sparkle burst effect
+            const sparkles = ['✨', '🌟', '💫', '⭐', '💖', '🎉'];
+            
+            setTimeout(() => {
+                for (let i = 0; i < 12; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle-burst';
+                    sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+                    
+                    const angle = (i / 12) * Math.PI * 2;
+                    const distance = 150;
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+                    
+                    sparkle.style.setProperty('--tx', `${tx}px`);
+                    sparkle.style.setProperty('--ty', `${ty}px`);
+                    sparkle.style.left = '50%';
+                    sparkle.style.top = '30%';
+                    
+                    cakeScene.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        sparkle.remove();
+                    }, 1500);
+                }
+            }, 1800);
+
+            // Close overlay after animation
+            setTimeout(() => {
+                cakeCuttingOverlay.classList.remove('active');
+            }, 4500);
+        });
+
+        // Close overlay on click
+        cakeCuttingOverlay.addEventListener('click', () => {
+            cakeCuttingOverlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
