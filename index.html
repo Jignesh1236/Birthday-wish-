@@ -14,9 +14,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #FFE5F1 0%, #E8D5F2 25%, #C9E4F5 50%, #FFE5EC 75%, #FFF5E1 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
+            background: url('attached_assets/image_1761814325594.png') center/cover no-repeat fixed;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -24,11 +22,7 @@
             position: relative;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        
 
         #confetti-canvas {
             position: fixed;
